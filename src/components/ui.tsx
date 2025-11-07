@@ -195,7 +195,7 @@ export function OrbitDeck() {
 }
 
 function OrbitCard(props: {
-  member: Core.TeamMember;
+  member: TeamMember;
   i: number;
   refCb: (el: HTMLDivElement | null) => void;
   open: boolean;
@@ -311,8 +311,8 @@ export function WaterlineStrip(props: { onRef?: (h?: Effects.WaterlineHandle)=>v
  * ======================================================================================= */
 
 export function LedgerTable(props: {
-  rows: Core.Transaction[];
-  onRowSelect?: (row: Core.Transaction | null) => void;
+  rows: Transaction[];
+  onRowSelect?: (row: Transaction | null) => void;
 }) {
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const [scrollTop, setScrollTop] = useState(0);
@@ -371,7 +371,7 @@ export function LedgerTable(props: {
  * 7) RowContextPanel — timeline, attachments, linkouts
  * ======================================================================================= */
 
-export function RowContextPanel(props: { row?: Core.Transaction | null; onClose?: ()=>void }) {
+export function RowContextPanel(props: { row?: Transaction | null; onClose?: ()=>void }) {
   const r = props.row;
   if (!r) return null;
   const bill = r.billId ? Core.bills.find(b => b.id === r.billId) : undefined;
@@ -401,14 +401,14 @@ export function RowContextPanel(props: { row?: Core.Transaction | null; onClose?
 
 export function Kanban() {
   const groups = useMemo(() => {
-    const map = new Map<Core.BillStatus, Core.Bill[]>();
-    (["Draft","Submitted","Approved","Denied","Revised"] as Core.BillStatus[]).forEach(s => map.set(s, []));
+    const map = new Map<BillStatus, Bill[]>();
+    (["Draft","Submitted","Approved","Denied","Revised"] as BillStatus[]).forEach(s => map.set(s, []));
     Core.bills.forEach(b => map.get(b.status)?.push(b));
     return map;
   }, []);
   return (
     <div style={{ display:"grid", gridTemplateColumns:"repeat(5, minmax(220px, 1fr))", gap: 16 }}>
-      {(["Draft","Submitted","Approved","Denied","Revised"] as Core.BillStatus[]).map((s) => (
+      {(["Draft","Submitted","Approved","Denied","Revised"] as BillStatus[]).map((s) => (
         <div key={s} className="card" style={{ padding: 12 }}>
           <div className="caption" style={{ marginBottom: 10 }}>{s}</div>
           <div style={{ display:"grid", gap: 10 }}>
@@ -420,7 +420,9 @@ export function Kanban() {
   );
 }
 
-function BillFoldCard({ bill }: { bill: Core.Bill }) {
+export function ExportMenu(props: { rows: Transaction[] }) {
+  function onCSV() {
+    const cols: CSVColumn<Transaction>[] = [
   const rootRef = useRef<HTMLDivElement | null>(null);
   const [fold, setFold] = useState<ReturnType<typeof Effects.mountFold>>();
   useIsomorphicLayoutEffect(() => {
