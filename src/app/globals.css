@@ -1,0 +1,370 @@
+/* src/app/globals.css
+   Global foundation for HPU Class of 2029 SGA — prestige glass, orbit, cinema rail,
+   ripple hovers, reduced-motion parity, and print-perfect ledger exports.
+   Requires tokens: @import "./tokens.css";
+*/
+
+@import "./tokens.css";
+
+/* ==========================================================================
+   0) Normalize / Reset
+   ========================================================================== */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body, #__next, main { height: 100%; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.35;
+  letter-spacing: .01em;
+  color: var(--on-dark);
+  background: radial-gradient(1200px 800px at 80% -10%, rgba(75,23,150,.25), transparent 60%),
+              radial-gradient(900px 700px at -10% 80%, rgba(201,179,126,.12), transparent 55%),
+              var(--inkx);
+}
+
+/* Selection & focus */
+::selection { background: rgba(201,179,126,.35); color: var(--on-dark); }
+:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+  transition: box-shadow var(--dur-fast) var(--ease-emph);
+}
+
+/* Scrollbars (WebKit) */
+*::-webkit-scrollbar { width: 12px; height: 12px; }
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(201,179,126,.55), rgba(75,23,150,.55));
+  border-radius: 20px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-track { background: transparent; }
+
+/* ==========================================================================
+   1) Typography Scale & Utilities
+   ========================================================================== */
+:root{
+  --fz-1: clamp(36px, 3.4vw, 56px);  /* display */
+  --fz-2: clamp(28px, 2.6vw, 40px);  /* h1 */
+  --fz-3: clamp(22px, 1.9vw, 28px);  /* h2 */
+  --fz-4: clamp(18px, 1.5vw, 22px);  /* h3 */
+  --fz-5: 16px;                       /* body */
+  --fz-6: 14px;                       /* caption */
+}
+
+h1,h2,h3,h4,h5,h6{
+  margin: 0 0 var(--space-4);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.15;
+  text-wrap: balance;
+}
+h1{ font-size: var(--fz-2); }
+h2{ font-size: var(--fz-3); }
+h3{ font-size: var(--fz-4); }
+
+p { margin: 0 0 var(--space-4); color: var(--on-dark); opacity: .92; }
+small, .caption { font-size: var(--fz-6); opacity: .8; }
+
+/* Numeric contexts use tabular lining for perfect columns */
+[data-numeric], table, .kpi, .ledger {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Links & buttons */
+a {
+  color: var(--on-purple);
+  text-decoration: none;
+  position: relative;
+}
+a:hover::after, .btn.link:hover::after {
+  content:"";
+  position: absolute; left: 0; right: 0; bottom: -2px; height: 2px;
+  background: var(--goldx);
+  border-radius: 1px;
+}
+
+.btn {
+  --h: 44px;
+  display: inline-flex; align-items: center; gap: 10px;
+  height: var(--h); padding: 0 18px;
+  border-radius: var(--radius);
+  color: var(--on-dark);
+  background: var(--purplex);
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,.08);
+  cursor: pointer;
+  transition: transform var(--dur-fast) var(--ease-emph), box-shadow var(--dur-fast) var(--ease-emph), filter var(--dur-fast) var(--ease-soft);
+}
+.btn:hover { transform: translateY(-1px) scale(1.01); filter: saturate(1.08); box-shadow: var(--shadow-lg); }
+.btn.gold { background: var(--goldx); color: var(--on-gold); }
+.btn.ghost {
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  backdrop-filter: var(--backdrop-blur);
+  border: 1px solid rgba(255,255,255,.12);
+}
+
+/* ==========================================================================
+   2) Layout Containers & Glass Surfaces
+   ========================================================================== */
+.container {
+  width: min(1200px, 92vw);
+  margin: 0 auto;
+  padding: var(--space-8) 0;
+}
+.section {
+  padding: clamp(40px, 6vw, 96px) 0;
+  position: relative;
+}
+
+.card {
+  background: var(--glass);
+  backdrop-filter: var(--backdrop-blur);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+/* Header: “Liquid Crest Bar” */
+.site-header {
+  position: sticky; top: 0; z-index: var(--z-header);
+  backdrop-filter: var(--backdrop-blur);
+  background: linear-gradient(180deg, rgba(15,11,27,.85), rgba(15,11,27,.6));
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.site-header .inner {
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  height: 72px; width: min(1200px, 92vw); margin: 0 auto;
+}
+.brand { display: flex; align-items: center; gap: 14px; font-weight: 700; letter-spacing: .02em; }
+.nav { display: flex; justify-content: center; gap: 18px; }
+.nav a {
+  padding: 10px 14px; border-radius: 14px;
+  color: var(--on-dark); opacity: .9;
+}
+.nav a[aria-current="page"]{
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+  border: 1px solid rgba(255,255,255,.12);
+}
+
+/* Hero */
+.hero {
+  position: relative; min-height: clamp(520px, 70vh, 780px); display: grid; place-items: center;
+  overflow: hidden;
+}
+.hero::before{
+  /* background image handled by inline style or class; gradient overlay here */
+  content:""; position:absolute; inset:-2px;
+  background:
+    radial-gradient(800px 480px at 15% 10%, rgba(201,179,126,.16), transparent 60%),
+    radial-gradient(880px 560px at 80% 65%, rgba(75,23,150,.22), transparent 65%),
+    linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.55));
+  z-index: 0;
+}
+.hero .stage {
+  position: relative; z-index: 1; text-align: center; max-width: 900px;
+}
+.hero h1 { font-size: var(--fz-1); }
+.hero p  { font-size: clamp(16px, 1.2vw, 18px); opacity: .92; }
+
+/* Spotlight cursor for hero (CSS-only mask; JS sets vars) */
+.hero .spotlight{
+  position: absolute; inset: -50vh; pointer-events: none; z-index: 1;
+  background: radial-gradient(circle at var(--spot-x,50%) var(--spot-y,50%), rgba(255,255,255,.12) 0%, rgba(255,255,255,0) 35%);
+  mix-blend-mode: soft-light;
+}
+
+/* ==========================================================================
+   3) Orbit Deck (5-card SGA)
+   ========================================================================== */
+.orbit {
+  --r: clamp(180px, 24vw, 280px);
+  position: relative; height: calc(var(--r)*2 + 180px);
+  display: grid; place-items: center;
+}
+.orbit .axis {
+  position: absolute; width: calc(var(--r)*2); height: 1px; background: linear-gradient(90deg, transparent, rgba(201,179,126,.65), transparent);
+  filter: blur(.4px);
+}
+.orbit .card {
+  position: absolute; width: clamp(220px, 26vw, 300px);
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform var(--dur-med) var(--spring-snappy), filter var(--dur-med) var(--ease-soft), box-shadow var(--dur-med) var(--ease-soft);
+}
+.orbit .card:hover { filter: saturate(1.08); box-shadow: var(--shadow-lg), var(--shadow-gold); }
+
+/* Flip faces */
+.card-face {
+  position:absolute; inset:0; backface-visibility:hidden; padding: var(--space-6);
+}
+.card-face.back {
+  transform: rotateY(180deg);
+  background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.03));
+}
+
+/* ==========================================================================
+   4) Cinema Rail (flagship events)
+   ========================================================================== */
+.cinema {
+  display: grid; grid-auto-flow: column; grid-auto-columns: 78%;
+  gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px;
+}
+@media (min-width: 880px){ .cinema{ grid-auto-columns: 48%; } }
+.cinema .poster {
+  position: relative; height: clamp(260px, 40vw, 420px);
+  border-radius: var(--radius-lg); scroll-snap-align: start;
+  overflow: hidden; box-shadow: var(--shadow-lg);
+  transform-origin: center center;
+  transition: transform var(--dur-med) var(--ease-emph), filter var(--dur-med) var(--ease-soft);
+}
+.cinema .poster:hover { transform: translateY(-2px) scale(1.02); filter: saturate(1.08) brightness(1.02); }
+.cinema .badge {
+  position: absolute; top: 14px; left: 14px;
+  padding: 8px 12px; border-radius: 14px; backdrop-filter: var(--backdrop-blur);
+  background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.2));
+  color: var(--on-dark); border: 1px solid rgba(255,255,255,.14);
+}
+
+/* ==========================================================================
+   5) Ledger & Tables (screen)
+   ========================================================================== */
+.table {
+  width: 100%; border-collapse: separate; border-spacing: 0 10px;
+}
+.table thead th {
+  text-align: left; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; opacity: .72; padding: 10px 14px;
+}
+.table tbody tr {
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  border: 1px solid rgba(255,255,255,.1);
+  box-shadow: var(--shadow-sm);
+}
+.table td { padding: 14px; }
+.table .amt.pos { color: var(--accent-good); }
+.table .amt.neg { color: var(--accent-bad); }
+
+/* Sticky columns (example) */
+.ledger-wrap { position: relative; overflow: auto; }
+.ledger-row { display: grid; grid-template-columns: 120px 120px 140px 1fr 1fr; align-items: center; }
+.ledger-row .sticky {
+  position: sticky; left: 0; background: linear-gradient(180deg, rgba(15,11,27,.96), rgba(15,11,27,.86));
+  backdrop-filter: var(--backdrop-blur);
+}
+
+/* Waterline strip zone */
+.waterline {
+  position: relative; height: 10px; margin: 10px 0 16px; border-radius: 999px;
+  background: linear-gradient(90deg, rgba(201,179,126,.18), rgba(75,23,150,.22));
+  overflow: hidden;
+}
+.waterline canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* ==========================================================================
+   6) Ripple Hover (uses --mx / --my)
+   ========================================================================== */
+.ripple {
+  position: relative; isolation: isolate; overflow: hidden;
+}
+.ripple::after{
+  content:"";
+  position: absolute; width: var(--ripple-size); height: var(--ripple-size);
+  left: calc(var(--mx, 50%) - var(--ripple-size)/2);
+  top: calc(var(--my, 50%) - var(--ripple-size)/2);
+  pointer-events: none; z-index: -1;
+  background: radial-gradient(closest-side, rgba(201,179,126,.25), rgba(201,179,126,0) 70%);
+  filter: blur(6px);
+  opacity: 0; transform: scale(.6);
+  transition: opacity var(--dur-fast) var(--ease-soft), transform var(--dur-fast) var(--ease-emph);
+}
+.ripple:hover::after { opacity: 1; transform: scale(1); }
+
+/* ==========================================================================
+   7) Modals, Tooltips, Dock
+   ========================================================================== */
+.modal {
+  position: fixed; inset: 0; z-index: var(--z-modal);
+  display: grid; place-items: center;
+  background: radial-gradient(60% 80% at 50% 30%, rgba(0,0,0,.75), rgba(0,0,0,.55));
+}
+.modal .panel {
+  width: min(980px, 92vw); max-height: 86vh; overflow: auto;
+  border-radius: var(--radius-lg); background: var(--glass);
+  backdrop-filter: var(--backdrop-strong); border: 1px solid rgba(255,255,255,.12);
+  box-shadow: var(--shadow-lg);
+}
+
+.tooltip {
+  position: absolute; z-index: var(--z-toast);
+  padding: 8px 10px; font-size: 12px; border-radius: 10px;
+  color: var(--on-dark);
+  background: linear-gradient(180deg, rgba(0,0,0,.7), rgba(0,0,0,.55));
+  border: 1px solid rgba(255,255,255,.14);
+}
+
+/* Dock actions */
+.dock {
+  display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+}
+.dock .action {
+  padding: 14px 18px; border-radius: 16px; background: var(--glass);
+  border: 1px solid rgba(255,255,255,.12); box-shadow: var(--shadow);
+  transition: transform var(--dur-fast) var(--spring-snappy), filter var(--dur-fast) var(--ease-soft);
+}
+.dock .action:hover { transform: translateY(-2px) scale(1.03); filter: saturate(1.08); }
+
+/* ==========================================================================
+   8) Reduced Motion — disable transforms/animations
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce){
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  .orbit .card,
+  .cinema .poster,
+  .dock .action,
+  .btn { transform: none !important; }
+  .ripple::after { display: none !important; }
+  .waterline canvas { display: none !important; }
+}
+
+/* ==========================================================================
+   9) Print Styles — Ledger-first, B/W clarity
+   ========================================================================== */
+@media print {
+  :root{
+    --ink:#000000; --on-dark:#000000; --on-light:#000000;
+  }
+  body { background: #fff !important; color: #000 !important; }
+  .site-header, .hero, .orbit, .cinema, .dock, .modal, .tooltip { display: none !important; }
+  .section { padding: 0 !important; }
+  .card, .table tbody tr {
+    background: #fff !important;
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+  }
+  .ledger-wrap, .table { width: 100% !important; }
+  .table { border-collapse: collapse !important; border-spacing: 0 !important; }
+  .table thead th, .table td {
+    border: 1px solid #000 !important;
+    padding: 6px 8px !important;
+    color: #000 !important;
+  }
+  a::after { content: " (" attr(href) ")"; font-size: 10px; }
+}
