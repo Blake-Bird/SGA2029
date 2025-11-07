@@ -8,7 +8,9 @@
 
 import React, {useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react";
 import { Core } from "@/lib/core";
+import type { TeamMember, Transaction, BillStatus, Bill, CSVColumn } from "@/lib/core";
 import { Effects } from "@/lib/effects";
+
 
 /* =======================================================================================
  * Small Hooks
