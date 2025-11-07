@@ -449,12 +449,16 @@ export function mountFold(root: HTMLElement, options?: { duration?: number }) {
   root.style.transformStyle = "preserve-3d";
   root.style.willChange = "transform";
 
-  const front = root.querySelector<HTMLElement>(".card-face.front");
-  const back = root.querySelector<HTMLElement>(".card-face.back");
-  if (!front || !back) {
+  const frontNode = root.querySelector<HTMLElement>(".card-face.front");
+  const backNode  = root.querySelector<HTMLElement>(".card-face.back");
+  if (!frontNode || !backNode) {
     console.warn("mountFold: missing .card-face.front/back");
     return;
   }
+  // Non-nullable aliases so TS is happy inside nested funcs:
+  const frontEl: HTMLElement = frontNode;
+  const backEl:  HTMLElement = backNode;
+
 
   const dur = options?.duration ?? 520;
   let openState = false;
@@ -462,8 +466,8 @@ export function mountFold(root: HTMLElement, options?: { duration?: number }) {
   function setOpen(v: boolean) {
     openState = v;
     if (reduced) {
-      front.style.transform = v ? "rotateY(-180deg)" : "rotateY(0deg)";
-      back.style.transform = v ? "rotateY(0deg)" : "rotateY(180deg)";
+      frontEl.style.transform = v ? "rotateY(-180deg)" : "rotateY(0deg)";
+      backEl.style.transform  = v ? "rotateY(0deg)"   : "rotateY(180deg)";
       return;
     }
     const start = performance.now();
@@ -480,10 +484,10 @@ export function mountFold(root: HTMLElement, options?: { duration?: number }) {
       const t = from + (to - from) * k; // 0 → 1 open
       const angle = 180 * t;
 
-      front.style.transform = `rotateY(${-angle}deg)`;
-      back.style.transform = `rotateY(${180 - angle}deg)`;
-      front.style.filter = `brightness(${1 - 0.1 * t})`;
-      back.style.filter = `brightness(${0.9 + 0.1 * t})`;
+      frontEl.style.transform = `rotateY(${-angle}deg)`;
+      backEl.style.transform  = `rotateY(${180 - angle}deg)`;
+      frontEl.style.filter    = `brightness(${1 - 0.1 * t})`;
+      backEl.style.filter     = `brightness(${0.9 + 0.1 * t})`;
 
       if (p < 1) requestAnimationFrame(step);
     };
@@ -496,8 +500,8 @@ export function mountFold(root: HTMLElement, options?: { duration?: number }) {
     toggle: () => setOpen(!openState),
     destroy: () => {
       // reset
-      front.style.transform = "";
-      back.style.transform = "rotateY(180deg)";
+      frontEl.style.transform = "";
+      backEl.style.transform = "rotateY(180deg)";
       root.style.perspective = "";
       root.style.transformStyle = "";
       root.style.willChange = "";
@@ -505,7 +509,7 @@ export function mountFold(root: HTMLElement, options?: { duration?: number }) {
   };
 
   // init back face hidden by default
-  back.style.transform = "rotateY(180deg)";
+  backEl.style.transform = "rotateY(180deg)";
   return handle;
 }
 
