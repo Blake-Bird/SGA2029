@@ -41,7 +41,7 @@ import {
  * ======================================================================================= */
 
 function useRoute() {
-  const [route, setRoute] = useState<Core.ParsedRoute>(() =>
+  const [route, setRoute] = useState<ParsedRoute>(() =>
     Core.routeOf(typeof window !== "undefined" ? window.location.pathname : "/")
   );
   useEffect(() => {
@@ -62,7 +62,7 @@ function useRoute() {
   return [route, setRoute] as const;
 }
 
-function navigateTo(r: Core.ParsedRoute) {
+function navigateTo(r: ParsedRoute) {
   const href = Core.hrefFor(r);
   if (typeof window === "undefined") return;
   if (window.location.pathname === href) return;
@@ -368,13 +368,14 @@ function EventDetailModal(props: { id: string | null; onClose: () => void }) {
  * ======================================================================================= */
 
 function LedgerSection() {
-  const [filter, setFilter] = useState<Core.TxnFilter>({ type: "all" });
-  const [sort, setSort] = useState<Core.TxnSortKey>("date_desc");
+  const [filter, setFilter] = useState<TxnFilter>({ type: "all" });
+  const [sort, setSort] = useState<TxnSortKey>("date_desc");
   const [page, setPage] = useState(1);
   const pageSize = 50;
 
   const q = useMemo(() => Core.queryTransactions({ filter, sort, page, pageSize }), [filter, sort, page]);
-  const [selected, setSelected] = useState<Core.Transaction | null>(null);
+  const [selected, setSelected] = useState<Transaction | null>(null);
+
 
   const waterRef = useRef<Effects.WaterlineHandle>();
   const explain = Core.explainTransactionsView(filter, sort);
@@ -419,7 +420,7 @@ function LedgerSection() {
             </div>
             <select
               value={sort}
-              onChange={(e) => setSort(e.target.value as Core.TxnSortKey)}
+              onChange={(e) => setSort(e.target.value as TxnSortKey)}
               style={{
                 height: 44,
                 padding: "0 12px",
