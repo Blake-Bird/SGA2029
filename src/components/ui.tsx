@@ -420,24 +420,26 @@ export function Kanban() {
   );
 }
 
-export function ExportMenu(props: { rows: Transaction[] }) {
-  function onCSV() {
-    const cols: CSVColumn<Transaction>[] = [
+function BillFoldCard({ bill }: { bill: Bill }) {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const [fold, setFold] = useState<ReturnType<typeof Effects.mountFold>>();
+
   useIsomorphicLayoutEffect(() => {
     if (!rootRef.current) return;
     const h = Effects.mountFold(rootRef.current, { duration: 520 });
     setFold(h);
     return () => h?.destroy?.();
   }, []);
+
   return (
     <div ref={rootRef} className="card ripple" style={{ padding: 0 }}>
       <div className="card-face front" style={{ padding: 14 }}>
         <div className="caption">{bill.committee}</div>
         <div style={{ fontWeight: 700, marginTop: 4 }}>{bill.title}</div>
         <div data-numeric style={{ marginTop: 6 }}>{Core.formatMoney(bill.amountCents)}</div>
-        <button className="btn ghost" style={{ marginTop: 10 }} onClick={() => fold?.open()}>Open</button>
+        <button className="btn ghost" style={{ marginTop: 10 }} onClick={() => fold?.open()}>
+          Open
+        </button>
       </div>
       <div className="card-face back" style={{ padding: 14 }}>
         <div className="caption">Timeline</div>
@@ -454,6 +456,7 @@ export function ExportMenu(props: { rows: Transaction[] }) {
     </div>
   );
 }
+
 
 /* =======================================================================================
  * 9) BudgetImpactMeter — low/mid/high meter with live value
@@ -481,26 +484,28 @@ export function BudgetImpactMeter(props: { amountCents: number; balanceCents: nu
  * 10) ExportMenu — CSV + print
  * ======================================================================================= */
 
-export function ExportMenu(props: { rows: Core.Transaction[] }) {
+export function ExportMenu(props: { rows: Transaction[] }) {
   function onCSV() {
-    const cols: Core.CSVColumn<Core.Transaction>[] = [
-      { key:"date", title:"Date", value: r => Core.yyyyMmDd(r.date) },
-      { key:"type", title:"Type", value: r => r.type },
-      { key:"amt",  title:"Amount", value: r => Core.formatMoney(r.amountCents) },
-      { key:"vendor", title:"Vendor", value: r => r.vendor ?? "" },
-      { key:"memo", title:"Memo", value: r => r.memo ?? "" },
-      { key:"event", title:"Event", value: r => r.eventId ?? "" },
-      { key:"bill", title:"Bill", value: r => r.billId ?? "" },
+    const cols: CSVColumn<Transaction>[] = [
+      { key: "date",   title: "Date",   value: r => Core.yyyyMmDd(r.date) },
+      { key: "type",   title: "Type",   value: r => r.type },
+      { key: "amt",    title: "Amount", value: r => Core.formatMoney(r.amountCents) },
+      { key: "vendor", title: "Vendor", value: r => r.vendor ?? "" },
+      { key: "memo",   title: "Memo",   value: r => r.memo ?? "" },
+      { key: "event",  title: "Event",  value: r => r.eventId ?? "" },
+      { key: "bill",   title: "Bill",   value: r => r.billId ?? "" },
     ];
     const csv = Core.toCSV(props.rows, cols, ",");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = url; a.download = "ledger.csv"; a.click();
+    a.href = url;
+    a.download = "ledger.csv";
+    a.click();
     URL.revokeObjectURL(url);
   }
   return (
-    <div style={{ display:"flex", gap: 10 }}>
+    <div style={{ display: "flex", gap: 10 }}>
       <button className="btn ghost" onClick={onCSV}>Export CSV</button>
       <button className="btn ghost" onClick={() => window.print()}>Print</button>
     </div>
