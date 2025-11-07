@@ -559,7 +559,7 @@ function ProposalsSection() {
                   type="number"
                   placeholder="Estimated cost (USD)"
                   value={Math.round(cost / 100)}
-                  onChange={(e) => setCost(Core.cents(Number(e.target.value)))}
+                  onChange={(e) => setCost(Math.round(Number(e.target.value) * 100))}
                   style={{
                     height: 44,
                     padding: "0 12px",
