@@ -18,6 +18,7 @@ import React, {
   useState,
 } from "react";
 import { Core } from "@/lib/core";
+import type { ParsedRoute, TxnFilter, TxnSortKey, Transaction } from "@/lib/core";
 import { Effects } from "@/lib/effects";
 import {
   LiquidHeader, // (already rendered in layout but useful for storybook-style)
