@@ -35,6 +35,8 @@ import {
   Modal,
   LockGate,
 } from "@/components/ui";
+import { portalToSelector } from "@/lib/portal";
+
 
 /* =======================================================================================
  * Utilities & Page Routing
