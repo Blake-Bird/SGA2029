@@ -19,7 +19,7 @@ import React, {
 } from "react";
 import { Core } from "@/lib/core";
 import type { ParsedRoute, TxnFilter, TxnSortKey, Transaction } from "@/lib/core";
-import { Effects } from "@/lib/effects";
+import { Effects, type WaterlineHandle } from "@/lib/effects";
 import {
   LiquidHeader, // (already rendered in layout but useful for storybook-style)
   HomeHero,
@@ -379,7 +379,7 @@ function LedgerSection() {
   const [selected, setSelected] = useState<Transaction | null>(null);
 
 
-  const waterRef = useRef<Effects.WaterlineHandle>();
+  const waterRef = useRef<WaterlineHandle>();
   const explain = Core.explainTransactionsView(filter, sort);
 
   return (
