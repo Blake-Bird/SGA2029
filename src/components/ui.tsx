@@ -10,7 +10,8 @@ import React, {useCallback, useEffect, useLayoutEffect, useMemo, useRef, useStat
 import { Core } from "@/lib/core";
 import type { TeamMember, Transaction, BillStatus, Bill, CSVColumn } from "@/lib/core";
 import { Effects } from "@/lib/effects";
-import type { WaterlineHandle } from "@/lib/effects";
+import type { WaterlineHandle, OrbitHandle } from "@/lib/effects";
+
 
 
 /* =======================================================================================
@@ -127,7 +128,6 @@ function formatAria(v: number) { return Core.formatMoney(v); }
 export function OrbitDeck() {
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const cardRefs = useRef<HTMLDivElement[]>([]);
-  const [handle, setHandle] = useState<Effects.OrbitHandle | undefined>();
   const [openIndex, setOpen] = useState<number | null>(null);
 
   useIsomorphicLayoutEffect(() => {
@@ -292,7 +292,7 @@ function rectForModal(): DOMRect {
  * 5) WaterlineStrip — wraps effects.waterline
  * ======================================================================================= */
 
-export function WaterlineStrip(props: { onRef?: (h?: Effects.WaterlineHandle)=>void }) {
+export function WaterlineStrip(props: { onRef?: (h?: WaterlineHandle) => void }) {
   const ref = useRef<HTMLCanvasElement | null>(null);
   useEffect(() => {
     if (!ref.current) return;
