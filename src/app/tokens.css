@@ -1,0 +1,117 @@
+/* src/app/tokens.css
+   Prestige tokens for HPU Class of 2029 SGA — color, depth, motion.
+   Import in globals.css & components:  @import "./tokens.css";
+*/
+
+:root{
+  /* ===== Brand (HPU) ===== */
+  --purple:#330072;         /* HPU core */
+  --purple-600:#4B1796;     /* deep accent */
+  --purple-300:#8E69D9;     /* soft accent */
+  --gold:#C9B37E;           /* luxe accent */
+  --gold-600:#B59C67;
+  --ink:#191326;            /* primary text on light */
+  --mist:#F4F1FB;           /* soft surface */
+  --white:#FFFFFF;
+  --black:#000000;
+
+  /* On-colors (contrast ≥ 4.5:1 on target bg) */
+  --on-dark:#F8F7FB;
+  --on-light:#191326;
+  --on-purple:#F4F1FB;
+  --on-gold:#191326;
+
+  /* ===== Surfaces & Gradients ===== */
+  --surface:#0D0A14; /* deep charcoal base */
+  --surface-2:#151024;
+  --elev:#1B1530;
+  --glass:linear-gradient(180deg, rgba(255,255,255,.12) 0%, rgba(255,255,255,.04) 100%);
+  --purplex:linear-gradient(135deg, rgba(75,23,150,.85), rgba(51,0,114,.85));
+  --goldx:linear-gradient(135deg, #C9B37E, #B59C67);
+  --inkx:linear-gradient(180deg, #0F0B1B, #191326);
+
+  /* ===== Spacing & Sizing Scale (8pt w/ micros) ===== */
+  --space-0:0;
+  --space-1:4px;
+  --space-2:8px;
+  --space-3:12px;
+  --space-4:16px;
+  --space-5:20px;
+  --space-6:24px;
+  --space-8:32px;
+  --space-10:40px;
+  --space-12:48px;
+  --space-16:64px;
+  --space-24:96px;
+
+  /* ===== Radius & Strokes ===== */
+  --radius-xs:12px;
+  --radius:20px;           /* primary */
+  --radius-lg:28px;
+  --radius-xl:36px;
+  --ring:0 0 0 3px rgba(201,179,126,.55);
+
+  /* ===== Shadow / Elevation (cinematic) ===== */
+  --shadow-sm:0 6px 18px rgba(0,0,0,.18), 0 1px 3px rgba(0,0,0,.12);
+  --shadow:0 14px 40px rgba(0,0,0,.28), 0 4px 14px rgba(0,0,0,.18);
+  --shadow-lg:0 28px 80px rgba(0,0,0,.36), 0 8px 24px rgba(0,0,0,.22);
+  --shadow-gold:0 14px 40px rgba(201,179,126,.28), 0 0 0 1px rgba(201,179,126,.35) inset;
+
+  /* ===== Backdrop (glass) ===== */
+  --backdrop-blur:blur(12px) saturate(1.12);
+  --backdrop-strong:blur(18px) saturate(1.2);
+
+  /* ===== Typography ===== */
+  --font-ui:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  --font-mono:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-weight-regular:500;
+  --font-weight-bold:700;
+
+  /* ===== Motion — Durations ===== */
+  --dur-quick:120ms;
+  --dur-fast:200ms;
+  --dur-med:360ms;
+  --dur-slow:560ms;
+  --dur-epic:900ms;
+
+  /* ===== Motion — Timing (heroic curves) ===== */
+  --ease-out:   cubic-bezier(.2,.7,.2,1);
+  --ease-in:    cubic-bezier(.4,0,1,1);
+  --ease-emph:  cubic-bezier(.16,1,.3,1);   /* punchy exit */
+  --ease-soft:  cubic-bezier(.25,.46,.45,.94);
+  --spring-snappy:  cubic-bezier(.34,1.56,.42,1);
+  --spring-bouncy:  cubic-bezier(.22,1.7,.36,1);
+
+  /* ===== Motion — Special FX knobs ===== */
+  --parallax-max: 16px;     /* max translate for parallax layers */
+  --tilt-max: 6deg;         /* card/crest tilt */
+  --ripple-size: 240px;     /* hover ripple radius */
+  --portal-scale: 1.06;     /* initial scale for FLIP portals */
+
+  /* ===== Z-Index (layers) ===== */
+  --z-header:100;
+  --z-modal:300;
+  --z-portal:350;
+  --z-toast:400;
+  --z-devtools:9999;
+
+  /* ===== Data Viz Accents (subtle, luxe) ===== */
+  --accent-good:#2CCB87;
+  --accent-warn:#FFC857;
+  --accent-bad:#FF5A7A;
+  --accent-info:#6AA9FF;
+}
+
+/* High-contrast / reduced-motion toggles can read these tokens */
+@media (prefers-reduced-motion: reduce){
+  :root{
+    --dur-quick:0ms;
+    --dur-fast:0ms;
+    --dur-med:0ms;
+    --dur-slow:0ms;
+    --dur-epic:0ms;
+    --parallax-max: 0px;
+    --tilt-max: 0deg;
+    --ripple-size: 0px;
+  }
+}
