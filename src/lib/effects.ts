@@ -124,67 +124,71 @@ export function initWaterline(canvas: HTMLCanvasElement): WaterlineHandle | unde
   }
 
   function resize() {
-    const rect = canvas.getBoundingClientRect();
-    w = Math.max(200, rect.width);
-    h = Math.max(8, rect.height);
-    canvas.width = Math.round(w * DPR);
-    canvas.height = Math.round(h * DPR);
-    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  }
+  const rect = canvas.getBoundingClientRect();
+  w = Math.max(200, rect.width);
+  h = Math.max(8, rect.height);
+  canvas.width = Math.round(w * DPR);
+  canvas.height = Math.round(h * DPR);
+  if (!ctx) return; // ← guard for TS
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+}
 
   function draw(now: number) {
-    if (pageHidden) {
-      rafId = requestAnimationFrame(draw);
-      return;
-    }
-    const dt = (now - t0) / 1000;
-    t0 = now;
-
-    ctx.clearRect(0, 0, w, h);
-
-    // background gradient
-    const g = ctx.createLinearGradient(0, 0, w, h);
-    g.addColorStop(0, "rgba(201,179,126,0.22)");
-    g.addColorStop(1, "rgba(75,23,150,0.22)");
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, w, h);
-
-    // composite waves
-    ctx.globalCompositeOperation = "screen";
-    for (let i = 0; i < waves.length; i++) {
-      const { amp, freq, speed, phase } = waves[i];
-      ctx.beginPath();
-      for (let x = 0; x <= w; x += 2) {
-        const nx = x / w;
-        const y =
-          h / 2 +
-          Math.sin(nx * Math.PI * 2 + (now / 1000) * speed + phase) * amp +
-          Math.sin(nx * Math.PI * 2 * (1 / freq) + (now / 1000) * (speed * 0.7)) *
-            (amp * 0.1);
-        if (x === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-      }
-      ctx.lineTo(w, h);
-      ctx.lineTo(0, h);
-      ctx.closePath();
-      ctx.fillStyle = i === 0 ? "rgba(255,255,255,0.18)" : "rgba(255,255,255,0.10)";
-      ctx.fill();
-    }
-    ctx.globalCompositeOperation = "source-over";
-
-    // ripple pulse overlay
-    if (pulseStrength > 0.001) {
-      const grad = ctx.createRadialGradient(w * 0.1, h * 0.5, 0, w * 0.4, h * 0.5, w * 0.5);
-      grad.addColorStop(0, `rgba(255,255,255,${0.08 * pulseStrength})`);
-      grad.addColorStop(1, "rgba(255,255,255,0)");
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, w, h);
-      // decay
-      pulseStrength *= Math.pow(0.85, dt * 60);
-    }
-
-    if (!reduced) rafId = requestAnimationFrame(draw);
+  if (pageHidden) {
+    rafId = requestAnimationFrame(draw);
+    return;
   }
+  if (!ctx) return; // ← guard for TS
+
+  const dt = (now - t0) / 1000;
+  t0 = now;
+
+  ctx.clearRect(0, 0, w, h);
+
+  // background gradient
+  const g = ctx.createLinearGradient(0, 0, w, h);
+  g.addColorStop(0, "rgba(201,179,126,0.22)");
+  g.addColorStop(1, "rgba(75,23,150,0.22)");
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, w, h);
+
+  // composite waves
+  ctx.globalCompositeOperation = "screen";
+  for (let i = 0; i < waves.length; i++) {
+    const { amp, freq, speed, phase } = waves[i];
+    ctx.beginPath();
+    for (let x = 0; x <= w; x += 2) {
+      const nx = x / w;
+      const y =
+        h / 2 +
+        Math.sin(nx * Math.PI * 2 + (now / 1000) * speed + phase) * amp +
+        Math.sin(nx * Math.PI * 2 * (1 / freq) + (now / 1000) * (speed * 0.7)) *
+          (amp * 0.1);
+      if (x === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.lineTo(w, h);
+    ctx.lineTo(0, h);
+    ctx.closePath();
+    ctx.fillStyle = i === 0 ? "rgba(255,255,255,0.18)" : "rgba(255,255,255,0.10)";
+    ctx.fill();
+  }
+  ctx.globalCompositeOperation = "source-over";
+
+  // ripple pulse overlay
+  if (pulseStrength > 0.001) {
+    const grad = ctx.createRadialGradient(w * 0.1, h * 0.5, 0, w * 0.4, h * 0.5, w * 0.5);
+    grad.addColorStop(0, `rgba(255,255,255,${0.08 * pulseStrength})`);
+    grad.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, w, h);
+    // decay
+    pulseStrength *= Math.pow(0.85, dt * 60);
+  }
+
+  if (!reduced) rafId = requestAnimationFrame(draw);
+}
+
 
   resize();
   window.addEventListener("resize", resize);
@@ -192,17 +196,19 @@ export function initWaterline(canvas: HTMLCanvasElement): WaterlineHandle | unde
   if (!prefersReducedMotion()) {
     rafId = requestAnimationFrame(draw);
   } else {
-    // static bar for reduced motion
-    ctx.fillStyle = "rgba(255,255,255,0.08)";
-    ctx.fillRect(0, h * 0.35, w, h * 0.3);
-  }
+  // static bar for reduced motion
+  if (!ctx) return; // ← guard for TS
+  ctx.fillStyle = "rgba(255,255,255,0.08)";
+  ctx.fillRect(0, h * 0.35, w, h * 0.3);
+}
+
 
   return {
     pulse,
     destroy() {
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", resize);
-      // clear canvas
+      if (!ctx) return; // ← guard for TS
       ctx.clearRect(0, 0, w, h);
     },
   };
