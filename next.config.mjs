@@ -1,16 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   images: {
-    // If you later load remote images, add patterns here.
-    remotePatterns: [
-      // { protocol: 'https', hostname: 'images.ctfassets.net' }
-    ]
+    // add remotePatterns later if you load external images
+    remotePatterns: [],
+    // leave defaults; Next/Image works locally and on Vercel
   },
   experimental: {
-    optimizePackageImports: ['react', 'react-dom']
-  }
+    optimizePackageImports: ["react", "react-dom"], // optional but fine on Next 15
+  },
 };
 
 export default nextConfig;
