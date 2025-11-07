@@ -10,6 +10,7 @@ import React, {useCallback, useEffect, useLayoutEffect, useMemo, useRef, useStat
 import { Core } from "@/lib/core";
 import type { TeamMember, Transaction, BillStatus, Bill, CSVColumn } from "@/lib/core";
 import { Effects } from "@/lib/effects";
+import type { WaterlineHandle } from "@/lib/effects";
 
 
 /* =======================================================================================
@@ -134,8 +135,8 @@ export function OrbitDeck() {
     if (!wrap) return;
     const items = cardRefs.current.filter(Boolean);
     const h = Effects.startOrbit(wrap, { items, radius: 240, speed: 0.5 });
-    setHandle(h);
     return () => h?.destroy();
+
   }, []);
 
   // Keyboard navigation across cards + Enter to flip
@@ -245,7 +246,8 @@ export function CinemaRail(props: { onOpenEvent: (id: string) => void }) {
     const modalRect = rectForModal();
     Effects.playPortal(cardEl, modalRect, { duration: 440, scaleBias: 1.08, fade: true });
     props.onOpenEvent(id);
-  }, [props]);
+  }, [props.onOpenEvent]);
+
 
   return (
     <section className="section">
@@ -618,7 +620,7 @@ export function HomeHero(props: { onExploreEvents: ()=>void; onOpenLedger: ()=>v
 
 export function KpiRow() {
   const k = Core.computeKPIs(Core.transactions, new Date().getFullYear());
-  const waterRef = useRef<Effects.WaterlineHandle>();
+  const waterRef = useRef<WaterlineHandle>();
   return (
     <section className="section" aria-label="Finance snapshot">
       <div className="container">
